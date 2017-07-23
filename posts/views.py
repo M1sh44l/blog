@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Post
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
+
+""""
 def post_create(request):
 	post_list = Post.objects.all()
 	post_filter = Post.objects.filter(content__icontains="python").first()
@@ -14,24 +17,18 @@ def post_create(request):
 		"filter": post_filter,
 	}
 	return render(request, "create.html", context)
-
-def post_update(request):
-	return render(request, "update.html", {})
-
-def post_delete(request):
-	return render(request, "delete.html", {})
-
+"""
 def post_list(request):
-	return HttpResponse("<h1> list </h1>")
+	obj_list = Post.objects.all()
+	context = {
+		"post_list": obj_list,
+	}
+	return render(request, "post_list.html", context)
 
-def post_detail(request):
-	return HttpResponse("<h1> Detail </h1>")
+def post_detail(request, post_id):
+	obj = get_object_or_404(Post, id=post_id)
+	context = {
+			"instance": obj,
+	}
+	return render(request, "post_detail.html", context)
 
-def post_content(request):
-	return HttpResponse("<h2> Content </h2>")
-
-def post_image(request):
-	return HttpResponse("<h2> Image </h2>")
-
-def post_contact(request):
-	return HttpResponse("<h2> Contact </h2>")

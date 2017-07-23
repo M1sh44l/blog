@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>List</title>
+</head>
+<body>
+	<ol>
+		{% for i in post_list %}
+		<a href="/posts/detail/{{i.id}}"><li>{{i.title}}</li></a>
+		
+		{% endfor %}
+
+	</ol>
+
+</body>
+</html>
