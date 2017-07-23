@@ -6,7 +6,11 @@
 <body>
 	<ol>
 		{% for i in post_list %}
-		<a href="/posts/detail/{{i.id}}"><li>{{i.title}}</li></a>
+		
+		<!-- <a href="/posts/detail/{{i.id}}"><li>{{i.title}}</li></a> -->
+
+		<!-- The below referral is best practise rather the one above!	-->
+		<a href="{% url 'detail' post_id=i.id %}"><li>{{i.title}}</li></a>
 		
 		{% endfor %}
 
