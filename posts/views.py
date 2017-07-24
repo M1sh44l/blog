@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Post
 from django.shortcuts import get_object_or_404
+from .forms import PostForm
 
 # Create your views here.
 
@@ -31,4 +32,15 @@ def post_detail(request, post_id):
 			"instance": obj,
 	}
 	return render(request, "post_detail.html", context)
+
+def post_create(request):
+	form = PostForm()
+	context = {
+		"form": form,
+	}
+	return render(request, "post_create.html", context)
+
+
+
+
 
