@@ -7,10 +7,20 @@
 	<ol>
 		{% for i in post_list %}
 		
-		<!-- <a href="/posts/detail/{{i.id}}"><li>{{i.title}}</li></a> -->
+		<!-- 
+		#1 - This is the 1st way of calling/referring
 
-		<!-- The below referral is best practise rather the one above!	-->
-		<a href="{% url 'detail' post_id=i.id %}"><li>{{i.title}}</li></a>
+		<a href="/posts/detail/{{i.id}}"><li>{{i.title}}</li></a> 
+
+		 #2 - This is another way and 
+		 The below referral is best practice rather the one above!	
+		
+		<a href="{% url 'posts:detail' post_id=i.id %}"><li>{{i.title}}</li></a> 
+
+		#3 - The one below is better used for a specific model and when there are variables, in this case; title, content & id.
+		-->
+
+		<a href="{{i.get_absolute_url}}"><li>{{i.title}}</li></a>
 		
 		{% endfor %}
 
