@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>So bored</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Create{% endblock title %}
+
+{% block content %}
 	<form method="POST" action="{% url 'posts:create' %}">
 		{% csrf_token %}
 		{{form.as_p}}
 		<input type="submit" name="Create Post">
 	</form>
-</body>
-</html>
+{% endblock content %}

@@ -1,12 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>List</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{%block title%}List{%endblock title%}
+
+
+{% include 'messages.html' %}
+{% block content %}
+
 	<ol>
 		{% for i in post_list %}
+		<!-- That belongs here! -->
+		<a href="{{i.get_absolute_url}}"><li>{{i.title}}</li></a>
 		
+		{% endfor %}
+
+	</ol>
+{% endblock content %}
+
+
 		<!-- 
 		#1 - This is the 1st way of calling/referring
 
@@ -19,20 +29,3 @@
 
 		#3 - The one below is better used for a specific model and when there are variables, in this case; title, content & id.
 		-->
-
-		<a href="{{i.get_absolute_url}}"><li>{{i.title}}</li></a>
-		
-		{% endfor %}
-
-	</ol>
-
-			{% if messages %}
-		<ul class="messages">
-		    {% for message in messages %}
-		    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-		    {% endfor %}
-		</ul>
-{% endif %}
-
-</body>
-</html>
