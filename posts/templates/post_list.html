@@ -4,28 +4,26 @@
 
 
 {% include 'messages.html' %}
+
 {% block content %}
 
-	<ol>
-		{% for i in post_list %}
-		<!-- That belongs here! -->
-		<a href="{{i.get_absolute_url}}"><li>{{i.title}}</li></a>
-		
+<div class="row">
+{% for x in post_list %}
+	<div class="col-sm-6">
+		<div class="thumbnail">
+			<div class="caption">
+					<h3>{{x.title}}<small> {{x.timestamp|timesince}} ago</small></h3>
+					<p>{{x.content|linebreaks|truncatechars:10}}</p>
+					<p>
+						<a href="{{x.get_absolute_url}}" class="btn btn-primary">View</a>
+						<a href="{% url 'posts:update' post_id=x.id %}" class="btn btn-success">Edit</a>
+						<a href="{% url 'posts:delete' post_id=x.id %}" class="btn btn-danger">Delete</a>
+
+					</p>	
+			</div>
+		</div>
+	</div>
 		{% endfor %}
+		</div>
 
-	</ol>
 {% endblock content %}
-
-
-		<!-- 
-		#1 - This is the 1st way of calling/referring
-
-		<a href="/posts/detail/{{i.id}}"><li>{{i.title}}</li></a> 
-
-		 #2 - This is another way and 
-		 The below referral is best practice rather the one above!	
-		
-		<a href="{% url 'posts:detail' post_id=i.id %}"><li>{{i.title}}</li></a> 
-
-		#3 - The one below is better used for a specific model and when there are variables, in this case; title, content & id.
-		-->
