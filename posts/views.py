@@ -9,19 +9,6 @@ from urllib.parse import quote
 
 # Create your views here.
 
-""""
-def post_create(request):
-	post_list = Post.objects.all()
-	post_filter = Post.objects.filter(content__icontains="python").first()
-	context = {
-		"title": "Post Page",
-		"content": "This is just a simple paragraph",
-		"user": request.user,
-		"list": post_list,
-		"filter": post_filter,
-	}
-	return render(request, "create.html", context)
-"""
 def post_list(request):
     obj_list = Post.objects.all()#.order_by("-timestamp", "-updated")
     paginator = Paginator(obj_list, 10) # Show 25 contacts per page
@@ -41,8 +28,8 @@ def post_list(request):
     }
     return render(request, "post_list.html", context)
 
-def post_detail(request, post_id):
-	obj = get_object_or_404(Post, id=post_id)
+def post_detail(request, slug):
+	obj = get_object_or_404(Post, slug=slug)
 	context = {
 			"instance": obj,
 			"share_string": quote(obj.content),
@@ -60,8 +47,8 @@ def post_create(request):
 	}
 	return render(request, "post_create.html", context)
 
-def post_update(request, post_id):
-	post_object = get_object_or_404(Post, id=post_id)
+def post_update(request, slug):
+	post_object = get_object_or_404(Post, slug=slug)
 	form = PostForm(request.POST or None, request.FILES or None, instance=post_object)
 	if form.is_valid():
 		form.save()
@@ -73,8 +60,8 @@ def post_update(request, post_id):
 	}
 	return render(request, "post_update.html", context)
 
-def post_delete(request, post_id):
-	delete_object = Post.objects.get(id=post_id)
+def post_delete(request, slug):
+	delete_object = Post.objects.get(slug=slug)
 	delete_object.delete()
 	#or the above could be done in one line: delete_object = = Post.objects.get(id=post_id).delete()
 	messages.warning(request, "Seriously bro?")
