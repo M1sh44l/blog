@@ -12,6 +12,8 @@
 				<div class="caption">
 						<h3>{{instance.title}}<small> {{instance.timestamp|timesince}} ago</small></h3>
 						<p>{{instance.content|linebreaks|truncatechars:10}}</p>
+
+						Author: {{instance.author.get_full_name}}
 						<p>
 							<a href="{{instance.get_absolute_url}}" class="btn btn-primary">View</a>
 							<a href="{% url 'posts:update' slug=instance.slug %}" class="btn btn-success">Edit</a>
@@ -26,8 +28,8 @@
 						</a>
 						<br>
 						<a href="https://www.linkedin.com/shareArticle?mini=true&url={{request.build_absolute_uri}}&title={{instance.title|urlify}}&summary={{instance.content|urlify}}&source={{request.build_absolute_uri}}">
-Share on Linkedin
-</a>
+						Share on Linkedin
+						</a>
 				</div>
 			</div>
 		</div>

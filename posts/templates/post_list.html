@@ -19,8 +19,12 @@
 						<p>{{x.content|linebreaks|truncatechars:10}}</p>
 						<p>
 							<a href="{{x.get_absolute_url}}" class="btn btn-primary">View</a>
-							<a href="{% url 'posts:update' slug=x.slug %}" class="btn btn-success">Edit</a>
-							<a href="{% url 'posts:delete' slug=x.slug %}" class="btn btn-danger">Delete</a>
+							{# This below was a challenge to show the Edit & Delete for Staff User or Super User! #}
+							{% if user or user2 %}
+								<a href="{% url 'posts:update' slug=x.slug %}" class="btn btn-success">Edit</a>
+								<a href="{% url 'posts:delete' slug=x.slug %}" class="btn btn-danger">Delete</a>
+							{% endif %}
+							
 
 						</p>	
 				</div>

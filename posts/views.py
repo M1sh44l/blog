@@ -6,6 +6,7 @@ from .forms import PostForm
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from urllib.parse import quote
+from django.http import Http404
 
 # Create your views here.
 
@@ -25,6 +26,8 @@ def post_list(request):
 
     context = {
         "post_list": objs,
+        "user": request.user.is_staff,
+        "user2": request.user.is_superuser,
     }
     return render(request, "post_list.html", context)
 
@@ -37,6 +40,8 @@ def post_detail(request, slug):
 	return render(request, "post_detail.html", context)
 
 def post_create(request):
+	if not (request.user.is_staff or request.user.is_superuser):
+		raise Http404
 	form = PostForm(request.POST or None, request.FILES or None)
 	if form.is_valid():
 		form.save()
@@ -48,6 +53,8 @@ def post_create(request):
 	return render(request, "post_create.html", context)
 
 def post_update(request, slug):
+	if not (request.user.is_staff or request.user.is_superuser):
+		raise Http404
 	post_object = get_object_or_404(Post, slug=slug)
 	form = PostForm(request.POST or None, request.FILES or None, instance=post_object)
 	if form.is_valid():
@@ -61,6 +68,8 @@ def post_update(request, slug):
 	return render(request, "post_update.html", context)
 
 def post_delete(request, slug):
+	if not request.user.is_superuser:
+		raise Http404
 	delete_object = Post.objects.get(slug=slug)
 	delete_object.delete()
 	#or the above could be done in one line: delete_object = = Post.objects.get(id=post_id).delete()
