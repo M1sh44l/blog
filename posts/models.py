@@ -1,13 +1,13 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_save
 
 # Create your models here.
 class Post(models.Model):
 	title = models.CharField(max_length=250)
 	image = models.ImageField(upload_to="blog_images", null=True, blank=True)
-	slug = models.SlugField(unique=True)
+	slug = models.SlugField(unique=True, null=True)
 	content = models.TextField()
 	updated = models.DateTimeField(auto_now=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
@@ -24,19 +24,25 @@ class Post(models.Model):
 
 
 
-def create_slug(instance, new_slug=None):
-	slug_title = slugify(instance.title)
-	if new_slug is not None:
-		slug_title = new_slug
-	qs = Post.objects.filter(slug=slug_title)
-	exists = qs.exists()
-	if exists:
-		new_slug = "%s-%s"%(slug_title, instance.id)
-		return create_slug(instance, new_slug=new_slug)
-	return slug_title
+# def create_slug(instance, new_slug=None):
+# 	slug_title = slugify(instance.title)
+# 	if new_slug is not None:
+# 		slug_title = new_slug
+# 	qs = Post.objects.filter(slug=slug_title)
+# 	exists = qs.exists()
+# 	if exists:
+# 		new_slug = "%s-%s"%(slug_title, instance.id)
+# 		return create_slug(instance, new_slug=new_slug)
+# 	return slug_title
 
 def post_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
-		instance.slug = create_slug(instance)
+		slug = slugify(instance.title)
+		qs = Post.objects.filter(slug=slug)
+		exists = qs.exists()
+		if exists:
+			slug = "%s-%s"%(slug, instance.id)
+		instance.slug = slug
+		instance.save()
 
-pre_save.connect(post_receiver, sender=Post)
+post_save.connect(post_receiver, sender=Post)
