@@ -3,17 +3,17 @@
 
 {% block title %}Detail{% endblock title %}
 
-{{% block content %}
+{% block content %}
 	<div class="col-sm-6">
 			<div class="thumbnail">
 				{% if instance.image %}
 					<img src="{{instance.image.url}}" class="img-responsive">
 				{% endif %}
 				<div class="caption">
-						<h3>{{instance.title}}<small> {{instance.timestamp|timesince}} ago</small></h3>
-						<p>{{instance.content|linebreaks|truncatechars:10}}</p>
+						<h3>{{instance.title}}<small> {{instance.publish|timesince}} ago</small></h3>
+						<p>{{instance.content|linebreaks|truncatechars:100}}</p>
 
-						Author: {{instance.author.get_full_name}}
+						Author: {{instance.author.username}}
 						<p>
 							<a href="{{instance.get_absolute_url}}" class="btn btn-primary">View</a>
 							<a href="{% url 'posts:update' slug=instance.slug %}" class="btn btn-success">Edit</a>
@@ -38,4 +38,4 @@
 		
 
 		<a href="{% url 'posts:list' %}" class="btn btn-primary">Go back to list</a>
-{% endblock content %}}
+{% endblock content %}

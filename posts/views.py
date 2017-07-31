@@ -7,32 +7,56 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from urllib.parse import quote
 from django.http import Http404
+from django.utils import timezone
+from django.db.models import Q
+
 
 # Create your views here.
 
 def post_list(request):
-    obj_list = Post.objects.all()#.order_by("-timestamp", "-updated")
-    paginator = Paginator(obj_list, 10) # Show 25 contacts per page
+	today = timezone.now().date()
+	#obj_list = Post.objects.all()
+	if request.user.is_superuser or request.user.is_staff:
+		obj_list = Post.objects.all()
+	else:
+		obj_list = Post.objects.filter(draft=False).filter(publish__lte=today)
 
-    page = request.GET.get('page')
-    try:
-        objs = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        objs = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        objs = paginator.page(paginator.num_pages)
+	# Here activating the search bar which was done in the post_list.html i.e. "q"
+	query = request.GET.get("q")
+	if query:
+		obj_list = obj_list.filter(
+			Q(title__icontains=query)|
+			Q(content__contains=query)|
+			Q(author__first_name__icontains=query)|
+			Q(author__last_name__icontains=query)
+			).distinct()
 
-    context = {
-        "post_list": objs,
-        "user": request.user.is_staff,
-        "user2": request.user.is_superuser,
-    }
-    return render(request, "post_list.html", context)
+	#Listing through pages whenever necessary
+	paginator = Paginator(obj_list, 10) # Show 25 contacts per page
+	page = request.GET.get('page')
+	try:
+		objs = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		objs = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		objs = paginator.page(paginator.num_pages)
+
+	context = {
+		"post_list": objs,
+		"today": today,
+		"query": query,
+	}
+	return render(request, "post_list.html", context)
 
 def post_detail(request, slug):
 	obj = get_object_or_404(Post, slug=slug)
+	date = timezone.now().date()
+
+	if obj.publish > date or obj.draft:
+		if not(request.user.is_superuser or request.user.is_staff):
+			raise Http404
 	context = {
 			"instance": obj,
 			"share_string": quote(obj.content),
@@ -44,7 +68,9 @@ def post_create(request):
 		raise Http404
 	form = PostForm(request.POST or None, request.FILES or None)
 	if form.is_valid():
-		form.save()
+		obj = form.save(commit=False)
+		obj.author = request.user
+		obj.save()
 		messages.success(request, "OMG! Nice one!")
 		return redirect("posts:list")
 	context = {
