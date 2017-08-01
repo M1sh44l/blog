@@ -1,5 +1,6 @@
 {%extends 'base.html'%}
 {% load urlify %}
+{% load crispy_forms_tags %}
 
 {% block title %}Detail{% endblock title %}
 
@@ -31,11 +32,14 @@
 						Share on Linkedin
 						</a>
 				</div>
+				{% include "django_comments.html" %}
+				<br>
+				<a href="{% url 'posts:list' %}" class="btn btn-primary">Go back to list</a>
 			</div>
 		</div>
 		
 
 		
 
-		<a href="{% url 'posts:list' %}" class="btn btn-primary">Go back to list</a>
+		
 {% endblock content %}
