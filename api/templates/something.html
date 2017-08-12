@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+</head>
+<body>
+<ol>
+	{% for result in results %}
+		<li><h3>{{result.actor.login}}</h3></li>
+		<li><img src="{{result.actor.avatar_url}}" alt=""></li>
+	{% endfor %}
+</ol>	
+</body>
+</html>
