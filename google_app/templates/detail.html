@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br><br>
+	<h1>STATUS: {{response.status}}</h1>
+
+	<table class="table">
+	<tr>
+		<td>{{response.result.name}}</td>
+		<td>{{response.result.formatted_address}}</td>
+		<td>{{response.result.website}}</td>
+
+	</tr>
+	</table>
+
+	<iframe
+		id="map"
+		width="600"
+		height="450"
+		frameborder="0" style="border:0"
+		src="" allowfullscreen>
+	</iframe>
+
+	<script>
+			var options = {
+			  enableHighAccuracy: true,
+			  timeout: 5000,
+			  maximumAge: 0
+			};
+
+			function success(pos) {
+			  var crd = pos.coords;
+			  var map = $("#map");
+			  map.attr('src', 'https://www.google.com/maps/embed/v1/directions?key={{key}}&origin='+crd.latitude+','+crd.longitude+'&destination={{response.result.geometry.location.lat}},{{response.result.geometry.location.lng}}')
+			  
+			};
+
+			function error(err) {
+			  console.warn("Error, something went wrong!");
+			};
+
+			navigator.geolocation.getCurrentPosition(success, error, options);
+	</script>
+
+{% endblock content %}

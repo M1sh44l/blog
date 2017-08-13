@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br>
+
+<h1>STATUS: {{response.status}}</h1>
+
+<form action="{% url 'google_app:text' %}" method="GET">
+	<input type="text" name="query" placeholder="Search for a place">
+	<input type="submit" value="Search" class="btn btn-primary">
+</form>
+
+{% if response.next_page_token %}
+	<form action="{% url 'google_app:text' %}" method="GET" >
+
+	<input type="hidden" name="next_page_token" value="{{response.next_page_token}}">
+	<input type="submit" value="Next Page" class="btn btn-primary">	
+
+	</form>
+{% endif %}
+	
+
+<table class="table">
+	{% for result in response.results  %}
+		
+		<tr>
+			<td>{{result.name}}</td>
+			 <td>
+				<form action="{% url 'google_app:detail' %}" method="GET" >
+
+					<input type="hidden" name="reference" value="{{result.reference}}">
+					<input type="submit" value="More Info" class="btn btn-primary">	
+
+				</form>
+			</td> 
+		</tr>
+				
+	{% endfor %}
+</table>
+{% endblock content %}
