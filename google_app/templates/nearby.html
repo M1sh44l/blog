@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br><br>
+<table class="table">
+	<form action="{% url 'google_app:nearby' %}" method="GET">
+	<input type="text" name="query" placeholder="Search for a place">
+	<input type="submit" value="Search" class="btn btn-primary">
+</form>
+</table>
+
+<script>
+			var options = {
+			  enableHighAccuracy: true,
+			  timeout: 5000,
+			  maximumAge: 0
+			};
+
+			function success(pos) {
+			  var crd = pos.coords;
+			  var map = $("#map");
+			  map.attr('src', 'https://www.google.com/maps/embed/v1/directions?key={{key}}&origin='+crd.latitude+','+crd.longitude+'&destination={{response.result.geometry.location.lat}},{{response.result.geometry.location.lng}}')
+			  
+			};
+
+			function error(err) {
+			  console.warn("Error, something went wrong!");
+			};
+
+			navigator.geolocation.getCurrentPosition(success, error, options);
+	</script>
+
+
+
+{% endblock content %}

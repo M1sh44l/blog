@@ -33,3 +33,15 @@ def place_detail(request):
 	'key': key,
 	}
 	return render(request, "detail.html", context)
+
+def nearby_search(request):
+	api_key = 'AIzaSyBjoa7nxUN3NBBPW0y2vHKsmSxBelDEbBs'
+	location = '-33.8670522,151.1957362'
+	radius = 500
+	url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&key=%s'%(location, radius, api_key)
+	response = requests.get(url)
+	context = {
+	'response': response.json(),
+	}
+	# return JsonResponse(response.json(), safe=False)
+	return render(request, "nearby.html", context)

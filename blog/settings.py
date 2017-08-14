@@ -44,6 +44,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'google_app',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.twitter',
 ]
 
 SITE_ID = 1
@@ -136,6 +143,13 @@ JWT_AUTH = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
+AUTHENTICATION_BACKENDS = (
+    
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+)
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -160,4 +174,4 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-
+LOGIN_REDIRECT_URL = '/'
