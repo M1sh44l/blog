@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'google_app',
+    'github_app',
+    'twitter_app',
 
     'allauth',
     'allauth.account',
@@ -149,6 +151,18 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 
 )
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
+    }
+}
+
+
 
 LANGUAGE_CODE = 'en-us'
 

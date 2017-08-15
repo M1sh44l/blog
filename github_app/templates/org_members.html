@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br><br>
+<table class="table">
+{% for each in response  %}
+<tr>
+<td>{{each.login}}</td>
+<td>{{each.id}}</td>
+<td><img src="{{each.avatar_url}}" alt="" class="img img-responsive"></td>
+<td>{{each.type}}</td>
+<td>{{each.site_admin}}</td>
+</tr>
+
+{% endfor %}
+</table>	
+{% endblock content %}
+
+
